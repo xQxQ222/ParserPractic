@@ -15,7 +15,7 @@ namespace Parser.Controllers
         public async Task<IActionResult> GetPurchases([FromBody] RequestedBodyData body)
         {
             var res = await worker.GetPurchasesAsync(body.PurchaseId);
-            return Ok(JsonConvert.SerializeObject(res));
+            return Ok($"{JsonConvert.SerializeObject(res)}\n");
         }
     }
 }
