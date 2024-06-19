@@ -24,7 +24,7 @@ namespace Parser.Models
             Law = Selector(page, ".col-9.p-0.registry-entry__header-top__title.text-truncate");
             Customer = Selector(page, ".registry-entry__body-href");
             Dates = Selector(page, ".data-block.mt-auto");
-            CardURL = $"https://zakupki.gov.ru/epz/order/notice/ea20/view/common-info.html?regNumber={Id}";
+            CardURL = $"https://zakupki.gov.ru"+ page.QuerySelector(".registry-entry__header-mid__number a")?.GetAttribute("href").Trim('\n', ' ').Collapse();
         }
 
         public string ReturnAsJson(Purchase purchase)
