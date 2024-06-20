@@ -12,16 +12,7 @@ namespace Parser.ParserTools
         }
         public async Task<string> GetPageByLinkAsync(string url)
         {
-            var responce = GetResponseMessage(url);
-            if (responce.Result.IsSuccessStatusCode)
-            {
-                return await responce.Result.Content.ReadAsStringAsync();
-            }
-            return string.Empty;
-        }
-        private async Task<HttpResponseMessage> GetResponseMessage(string url)
-        {
-            return await httpClient.GetAsync(url);
+            return await httpClient.GetStringAsync(url);
         }
     }
 }
