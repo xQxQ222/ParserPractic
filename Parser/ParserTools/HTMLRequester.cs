@@ -1,19 +1,18 @@
-﻿using Parser.Factories;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace Parser.ParserTools
+﻿namespace Parser.ParserTools
 {
-    public class HTMLRequester
+    public class HTMLRequester:IHtmlRequester
     {
-        private readonly HttpClient httpClient = HTTPClientFactory.ClientFactory.CreateClient("GovPurchase");
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public HTMLRequester()
+        public HTMLRequester(IHttpClientFactory clientFactory)
         {
-            httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 YaBrowser/24.4.0.0 Safari/537.36");
+            this._httpClientFactory = clientFactory;
         }
-        public async Task<string> GetPageByLinkAsync(string url)
+
+        public async Task<string> GetPage(string url)
         {
-            return await httpClient.GetStringAsync(url);
+            var client = _httpClientFactory.CreateClient("GovPurchaseClient");
+            return await client.GetStringAsync(url);
         }
     }
 }
