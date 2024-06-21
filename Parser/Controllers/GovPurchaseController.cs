@@ -1,6 +1,7 @@
 ﻿using AngleSharp.Browser;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Parser.Factories;
 using Parser.Models;
 using Parser.ParserTools;
 using System;
@@ -12,7 +13,11 @@ namespace Parser.Controllers
     public class GovPurchaseController:ControllerBase
     {
         private readonly IParsing parser;
-        public GovPurchaseController(IParsing parser)=>this.parser = parser;
+        public GovPurchaseController()
+        {
+            parser=ParserFactory.GetGovPurchaseParser();
+        }
+
         [HttpGet("get/{PurchaseId}")]
         public async Task<ActionResult<string>> GetPurchases([FromRoute] RequestedBodyData body)
         {

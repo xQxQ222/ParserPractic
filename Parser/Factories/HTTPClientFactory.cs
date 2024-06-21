@@ -1,4 +1,4 @@
-﻿namespace Parser.ParserTools
+﻿namespace Parser.Factories
 {
     public class HTTPClientFactory
     {
@@ -6,12 +6,12 @@
 
         static HTTPClientFactory()
         {
-            var service=new ServiceCollection();
+            var service = new ServiceCollection();
             ConfigureServices(service);
-            var services=service.BuildServiceProvider();
+            var services = service.BuildServiceProvider();
             ClientFactory = services.GetRequiredService<IHttpClientFactory>();
         }
-        
+
         private static void ConfigureServices(ServiceCollection services)
         {
             services.AddHttpClient("GovPurchase");

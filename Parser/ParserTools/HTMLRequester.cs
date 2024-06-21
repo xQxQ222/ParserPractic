@@ -1,4 +1,5 @@
-﻿using static System.Runtime.InteropServices.JavaScript.JSType;
+﻿using Parser.Factories;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Parser.ParserTools
 {
