@@ -15,7 +15,7 @@ namespace Parser.ParserTools
             this.requester = requester;
         }
 
-        private List<string> GetPagesList(string purchaseId,IHtmlRequester requester)
+        public List<string> GetPagesList(string purchaseId)
         {
             var pages = new List<string>();
             var pageNumber = 1;
@@ -40,10 +40,10 @@ namespace Parser.ParserTools
             return document;
         }
 
-        public async Task<List<T>> Parse<T>(string parameter) where T : IBaseModel, new()
+        public async Task<List<T>> Parse<T>(List<string> pages) where T : IBaseModel, new()
         {
             List<T> purchases = new List<T>();
-            foreach (var page in GetPagesList(parameter,requester))
+            foreach (var page in pages)
             {
                 var document = await GetDocument(page);
                 var pageContent = document.QuerySelectorAll("div.row.no-gutters.registry-entry__form.mr-0");

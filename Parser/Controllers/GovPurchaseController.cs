@@ -17,13 +17,14 @@ namespace Parser.Controllers
             this.parser = parser;
         }
 
-        [HttpGet("get/{PurchaseId}")]
+        [HttpGet("GovPurchases/get/{PurchaseId}")]
         public async Task<ActionResult<string>> GetPurchases([FromRoute] RequestedBodyData body)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var res = await parser.Parse<Purchase>(body.PurchaseId);
+            var pages = parser.GetPagesList(body.PurchaseId);
+            var res = await parser.Parse<Purchase>(pages);
             return $"{JsonConvert.SerializeObject(res)}\n";
         }
     }
