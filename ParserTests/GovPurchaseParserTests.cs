@@ -13,7 +13,7 @@ namespace ParserTests
         }
         private string GetTestPageDirectory(string fileName)
         {
-            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory.Replace("\\bin\\Debug\\net8.0", ""),$"TestPages\\{fileName}");
+            return Path.Combine(AppDomain.CurrentDomain.BaseDirectory.Replace("\\bin\\Debug\\net8.0", ""), $"TestPages\\{fileName}");
         }
 
         [Test]
@@ -22,7 +22,7 @@ namespace ParserTests
             var html = File.ReadAllText(GetTestPageDirectory("TestPage1.txt"));
             var parser = new GovPurchaseParser(_requester);
 
-            var parsedItems =await parser.Parse<Purchase>(new List<string>() { html });
+            var parsedItems = await parser.Parse<Purchase>(new List<string>() { html });
 
             Assert.That(parsedItems.Count, Is.EqualTo(50));
 
@@ -38,15 +38,15 @@ namespace ParserTests
             var htmlFirst = File.ReadAllText(GetTestPageDirectory("TestPage1.txt"));
             var htmlSecond = File.ReadAllText(GetTestPageDirectory("TestPage2.txt"));
             var htmlThird = File.ReadAllText(GetTestPageDirectory("TestPage3.txt"));
-            var parser=new GovPurchaseParser(_requester);
+            var parser = new GovPurchaseParser(_requester);
 
             var parsedItemsTwoPages = await parser.Parse<Purchase>
-                (new List<string>() { htmlFirst, htmlSecond});
+                (new List<string>() { htmlFirst, htmlSecond });
 
             var parsedItemsThreePages = await parser.Parse<Purchase>
-                (new List<string>(){ htmlFirst, htmlSecond, htmlThird });
+                (new List<string>() { htmlFirst, htmlSecond, htmlThird });
 
-            Assert.That(parsedItemsTwoPages.Count,Is.Not.EqualTo(parsedItemsThreePages.Count));
+            Assert.That(parsedItemsTwoPages.Count, Is.Not.EqualTo(parsedItemsThreePages.Count));
 
             Assert.That(parsedItemsTwoPages.Count, Is.EqualTo(100));
 
@@ -59,7 +59,7 @@ namespace ParserTests
             Assert.That(parsedItemsThreePages.Where
                 (x => x.CardURL == "https://zakupki.gov.ru/epz/order/notice/notice223/common-info.html?noticeInfoId=15220506").Count,
                 Is.EqualTo(1));
-                
+
         }
 
         [Test]
@@ -69,8 +69,23 @@ namespace ParserTests
             var parser = new GovPurchaseParser(_requester);
 
             var parsedItems = await parser.Parse<Purchase>(new List<string>() { emptyHtmlPage });
-            
+
             Assert.That(parsedItems.Count, Is.EqualTo(0));
+        }
+
+        [Test]
+        public async Task NonValidPages()
+        {
+            var outOfBoundsPage = File.ReadAllText(GetTestPageDirectory("OutOfBoundsPage.txt"));
+            var nonValidPage = "yhwiurhgiy726451785932657";
+
+            var parser= new GovPurchaseParser(_requester);
+            
+            var nVPParsedItems=await parser.Parse<Purchase>(new List<string>() { nonValidPage });
+            var  oOBParsedItems= await parser.Parse<Purchase>(new List<string>() { outOfBoundsPage });
+
+            Assert.That(nVPParsedItems.Count, Is.EqualTo(0));
+            Assert.That(oOBParsedItems.Count, Is.EqualTo(0));
         }
     }
 }
